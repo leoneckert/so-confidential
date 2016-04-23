@@ -17,8 +17,9 @@ msgs = dict()
 
 if __name__ == "__main__":
    
-	handle_id = 0;
+	handle_id = 0
 	zeroSequence = 0
+	convoInterval = 86400 
 
 	while True:
 		msg_count = 0
@@ -33,12 +34,9 @@ if __name__ == "__main__":
 			# prints data like this: ['0', '1', '451686174', 'yes, thanks of the quick reply']
 		
 			if len(elems) > 4:
-				print "NOOOOOOOOOT THE LENGHT EXPECTED: " + str(len(elems))
-				print elems
 				while len(elems) > 4:
 					elems[len(elems) - 2] =  elems[len(elems) - 2] + "|" + elems[len(elems) - 1]
 					elems.remove(elems[len(elems) - 1])
-					print elems
 
 			if len(elems) == 4:
 				person = elems[0]
@@ -51,17 +49,24 @@ if __name__ == "__main__":
 
 				if currentConvo not in msgs[person]:
 					msgs[person][currentConvo] = list()
-				
+				elif int(time) - int(msgs[person][currentConvo][convoELem - 1][2]) > convoInterval:
+					currentConvo += 1
+					convoELem = 0
+					msgs[person][currentConvo] = list()
+					# print "NEW CONVO"
+
 				tempData = list()
 				tempData.append(text)
 				tempData.append(speaker)
 				tempData.append(time)
+
 				msgs[person][currentConvo].append(tempData)
+				# print msgs[person][currentConvo][convoELem ][2]
 				convoELem += 1
 			elif len(elems) == 1:
 				msgs[person][currentConvo][convoELem - 1][0] = msgs[person][currentConvo][convoELem -1][0] + " " + elems[0]
 			else:
-				print "NOOOOOOOOOT THE LENGHT EXPECTED: " + str(len(elems))
+				print "something is unexpected here. The lenght of this line list is: " + str(len(elems))
 				print elems
 				print "-"*40
 			
