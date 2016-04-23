@@ -87,7 +87,26 @@ if __name__ == "__main__":
 
 
 	print "done"
-	pprint(msgs)
+	# pprint(msgs)
+
+	for person in msgs:
+		# pprint(person)
+		# pprint(msgs[person])
+		# pprint(msgs[person][0]) #print first convo
+		
+		print "**P" + str(person) + "**"
+		# pprint(msgs[person])
+		for convo in msgs[person]:
+			print msgs[person][convo][0][0]
+		# 	print "\t**C" + str(convo) + "**"
+		# 	pprint(msgs[person][0][convo][0])
+
+		# pprint(msgs[person][0][0][0]) #prints all convo openers 
+
+
+
+
+		# pprint(msgs[person][0][len(msgs[person][0])-1][0]) #prints all convo enders
 
 
 
