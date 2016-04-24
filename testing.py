@@ -1,112 +1,61 @@
-from subprocess import Popen, PIPE
+
+import mdb
 import operator
 from pprint import pprint
 
 
-# from: http://stackoverflow.com/a/32988831/6163933
-def os_system(command):
-    process = Popen(command, stdout=PIPE, shell=True)
-    while True:
-        line = process.stdout.readline()
-        if not line:
-            break
-        yield line
+
+#                             _ _     
+#  _ __  _ __ ___ _ __     __| | |__  
+# | '_ \| '__/ _ \ '_ \   / _` | '_ \ 
+# | |_) | | |  __/ |_) | | (_| | |_) |
+# | .__/|_|  \___| .__/   \__,_|_.__/ 
+# |_|            |_|                  
+convoInterval = 86400 #one day
+mdb.init(convoInterval)
 
 
-msgs = dict()
 
-if __name__ == "__main__":
+if __name__ == "__main__" and len(mdb.db()) > 0:
+	# print "start"
    
-	handle_id = 0
-	zeroSequence = 0
-	convoInterval = 86400 
+	# pprint(mdb.db())
 
-	while True:
-		msg_count = 0
-		# print "trying handle_id: " + str(handle_id)
+	# print(len(mdb.db()))
+	# starters = dict()
+	# for person in msgs:
+	# 	# pprint(person)
+	# 	# pprint(msgs[person])
+	# 	# pprint(msgs[person][0]) #print first convo
 		
-		currentConvo = 0;
-		convoELem = 0
-		for line in os_system('sqlite3 ~/Library/Messages/chat.db "select handle_id, is_from_me, date, text from message where handle_id='+ str(handle_id) + ';"'):
-			line = line.strip()
-			# prints lines like this: 0|1|451686174|yes, thanks of the quick reply
-			elems = line.split("|")
-			# prints data like this: ['0', '1', '451686174', 'yes, thanks of the quick reply']
-		
-			if len(elems) > 4:
-				while len(elems) > 4:
-					elems[len(elems) - 2] =  elems[len(elems) - 2] + "|" + elems[len(elems) - 1]
-					elems.remove(elems[len(elems) - 1])
+	# 	# print "**P" + str(person) + "**"
+	# 	# pprint(msgs[person])
+	# 	for convo in msgs[person]:
+	# 		# print "\t- " + msgs[person][convo][0][0]
+	# 		line = msgs[person][convo][0][0]
+	# 		words = line.split()
+	# 		for word in words:
+	# 			if word not in starters:
+	# 				starters[word] = 0
+	# 			starters[word] += 1
+	# # print starters
 
-			if len(elems) == 4:
-				person = elems[0]
-				speaker = elems[1]
-				time = elems[2]
-				text = elems[3]
-
-				if person not in msgs:
-					msgs[person] = dict()
-
-				if currentConvo not in msgs[person]:
-					msgs[person][currentConvo] = list()
-				elif int(time) - int(msgs[person][currentConvo][convoELem - 1][2]) > convoInterval:
-					currentConvo += 1
-					convoELem = 0
-					msgs[person][currentConvo] = list()
-					# print "NEW CONVO"
-
-				tempData = list()
-				tempData.append(text)
-				tempData.append(speaker)
-				tempData.append(time)
-
-				msgs[person][currentConvo].append(tempData)
-				# print msgs[person][currentConvo][convoELem ][2]
-				convoELem += 1
-			elif len(elems) == 1:
-				msgs[person][currentConvo][convoELem - 1][0] = msgs[person][currentConvo][convoELem -1][0] + " " + elems[0]
-			else:
-				print "something is unexpected here. The lenght of this line list is: " + str(len(elems))
-				print elems
-				print "-"*40
-			
-			msg_count += 1
-		
-		# break
-		if msg_count > 0:
-			zeroSequence = 0
-		elif msg_count == 0:
-			zeroSequence += 1
-
-		if zeroSequence > 20:
-			print "reached handle_id " + str(handle_id) + " and counted 20 handle_id in a row with no messages. We must be done."
-			break
-
-		handle_id += 1
+	# SortedwordsTally2 = sorted(starters.items(), key=lambda x: (-x[1], x[0]))
+	# for i in range(100):
+	# 	w = SortedwordsTally2[i][0] #+ " " + str(SortedwordsTally2[i][1])
+	# 	print w, " ",
 
 
 
-	print "done"
-	# pprint(msgs)
 
-	for person in msgs:
-		# pprint(person)
-		# pprint(msgs[person])
-		# pprint(msgs[person][0]) #print first convo
-		
-		print "**P" + str(person) + "**"
-		# pprint(msgs[person])
-		for convo in msgs[person]:
-			print msgs[person][convo][0][0]
+
 		# 	print "\t**C" + str(convo) + "**"
 		# 	pprint(msgs[person][0][convo][0])
 
 		# pprint(msgs[person][0][0][0]) #prints all convo openers 
-
-
-
-
 		# pprint(msgs[person][0][len(msgs[person][0])-1][0]) #prints all convo enders
+
+	# pprint(msgs)
 
 
 
