@@ -92,3 +92,33 @@ def init(convoInterval):
 
 def db():
 	return msgs
+
+
+
+
+#### ANOTHER SOLUTION WOULD BE SOMETHING LIK THIS USINF PYTHON SQLITE3 library. Is this better?
+## from here: https://gist.github.com/nslater/b3cbc894ad2c2516dd02
+
+
+# import sqlite3
+# from os import path
+# # conn = sqlite3.connect('/Users/leoneckert/Library/Messages/chat.db')
+
+# if __name__ == "__main__":
+
+# 	CHAT_DB = path.expanduser("~/Library/Messages/chat.db")
+
+# 	# Apple's epoch starts on January 1st, 2001 for some reason...
+# 	# cf. http://apple.stackexchange.com/questions/114168
+# 	EPOCH=978307200
+
+# 	def list_chats():
+# 	    db = sqlite3.connect(CHAT_DB)
+# 	    cursor = db.cursor()
+# 	    rows = cursor.execute("""
+# 	        select text from message where is_from_me=1;
+# 	    """)
+# 	    for row in rows:
+# 	        print(row[0])
+
+# 	list_chats()
