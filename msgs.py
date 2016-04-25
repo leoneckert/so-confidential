@@ -34,22 +34,52 @@ def orderTally(tally):
 	return output
 		
 def returnAllTexts(db):
-	""" use like this:
-	all_msgs = msgs.returnAllTexts(db)
-	print all_msgs """
-
-	outputLines = ""
+	all_texts = list()
  	for person in db:
 		for convo in db[person]:
 			for text_data in db[person][convo]:
 				if(len(text_data[0]) > 0):
-					outputLines = outputLines + text_data[0] + "\n"
-	return outputLines		
+					all_texts.append(text_data[0])
+	return all_texts	
 
-# def getNumConvos(db):
-# 	count = 0
-# 	for person in db:
-# 		for convo in db[person]:
+def returnAllSentences(db):
+	all_sentences = list()
+	for person in db:
+		for convo in db[person]:
+			for text_data in db[person][convo]:
+				if(len(text_data[0]) > 0):
+					blob = TextBlob(text_data[0].decode('utf8'))
+					for sentence in blob.sentences:
+						all_sentences.append(sentence)
+	return all_sentences
+
+
+def returnRandomSentence(db):
+	ss = returnAllSentences(db)
+	return random.sample(ss, 1)[0]
+
+
+def getTimeRange(db):
+	latest = 0
+	earliest = 0
+	first = True
+	for person in db:
+		for convo in db[person]:
+			for text_data in db[person][convo]:
+				if first:
+					first = False
+					earliest = text_data[2]
+					earliesttext = text_data[0]
+				if text_data[2] > latest:
+					latest = text_data[2]
+					latesttext = text_data[0]
+				if text_data[2] < earliest:
+					earliest = text_data[2]
+					earliesttext = text_data[0]	
+	tempList = list()
+	tempList.append(earliest)
+	tempList.append(latest)
+	return tuple(tempList)
 
 
 def returnRandomConvo(db):

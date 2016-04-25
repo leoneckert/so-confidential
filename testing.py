@@ -1,6 +1,7 @@
 import mdb
 import msgs
 from pprint import pprint
+import random
 
 
 
@@ -20,30 +21,49 @@ if __name__ == "__main__" and len(mdb.db()) > 0:
 	print "[+] actual program starts.\n"
 	db = mdb.db()
 
-	all_msgs = msgs.returnAllTexts(db)
-	print all_msgs
-	# for i in range(10):
-	# 	print msgs.returnRandomText(db)
-	# 	print "-"*50
-	# for u in range(30):
-	# 	text = " "
-	# 	while text[-1] is not "?":
-	# 		text = msgs.returnRandomText(db)
-	# 		if len(text) < 1:
-	# 			text = " "
-	# 	print text
-	# 	print "-"*50
+	# all_msgs = msgs.returnAllTexts(db)
+	# print all_msgs
 
 
-	# r_convo = returnRandomConvo(db)
-	# print r_convo
+	# c = 0
+	# while c < 10:
+	# 	s = msgs.returnRandomSentence(db)
+	# 	if len(s) == 0:
+	# 		s = " "
+	# 	if s.endswith("?") or s.endswith(".") or s.endswith("!"):  
+	# 		print "-"*50
+	# 		print "-"*50
+	# 		print s
+	# 		print "-"*50
+	# 		print "-"*50
+	# 		c += 1
+
+	# c = 0
+	# while c < 5:
+	# 	s = msgs.returnRandomSentence(db)
+	# 	if len(s.split()) == 0:
+	# 		s = " "
+	# 	if s.endswith("."):  
+	# 		print s
+	# 		print "-"*50
+
+	# 		c += 1
+
+	tRange = msgs.getTimeRange(db)
+	print tRange
+	print tRange[0]
+	print tRange[1]
+	print msgs.getTimeRange(db)[0]
 
 
-	# all_message_string = ""
-	# for msg in all_msgs:
-	# 	all_message_string = all_message_string + " " + msg
-	# print all_message_string
 
+	# c = 0
+	# while c < 10:
+	# 	s = msgs.returnRandomSentence(db)
+	# 	if len(s.split()) is c+1:
+	# 		print s
+	# 		print "-"*50
+	# 		c += 1
 
 
 
