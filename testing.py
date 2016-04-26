@@ -97,52 +97,180 @@ if __name__ == "__main__" and len(mdb.db()) > 0:
 	# 			print "-"*100
 	# 			c += 1
 
-	patterns = dict()
-	s = msgs.returnAllSentences(db)
-	for e in s:
-		blob = TextBlob(str(e[0]).decode('utf8'))
-		p  = ""
-		for word, pos in blob.tags:
-			p = p + " " + str(pos)
-		if p not in patterns:
-			patterns[p] = 0
-		patterns[p] += 1
-	patterns = msgs.orderTally(patterns)
-	# pprint(patterns)
 
 
-	for i in range(50):
-		print str(patterns[i][0]) + " : "
-		p_set = dict()
-		for e in s:
-			blob = TextBlob(str(e[0]).decode('utf8'))
-			p  = ""
-			for word, pos in blob.tags:
-				p = p + " " + str(pos)
-			if p == str(patterns[i][0]):
-				if e[0] not in p_set:
-					p_set[e[0]] = 0
-				p_set[e[0]] += 1
+	##  Pattern analysis!!!
+	# patterns = dict()
+	# s = msgs.returnAllSentences(db)
+	# for e in s:
+	# 	blob = TextBlob(str(e[0]).decode('utf8'))
+	# 	p  = ""
+	# 	for word, pos in blob.tags:
+	# 		p = p + " " + str(pos)
+	# 	if p not in patterns:
+	# 		patterns[p] = 0
+	# 	patterns[p] += 1
+	# patterns = msgs.orderTally(patterns)
+	# # pprint(patterns)
+	# print len(patterns)
 
-				# print "\t" + str(e[0])
-		p_set = msgs.orderTally(p_set)
-		for i in p_set:
-			print "\t" + str(i[0]) + " --- " + str(i[1])
+	# for i in range(200, 500):
+	# 	print str(i) + ". " + str(patterns[i][0]) + " : "
+	# 	p_set = dict()
+	# 	for e in s:
+	# 		blob = TextBlob(str(e[0]).decode('utf8'))
+	# 		p  = ""
+	# 		for word, pos in blob.tags:
+	# 			p = p + " " + str(pos)
+	# 		if p == str(patterns[i][0]):
+	# 			if e[0] not in p_set:
+	# 				p_set[e[0]] = 0
+	# 			p_set[e[0]] += 1
+
+	# 			# print "\t" + str(e[0])
+	# 	p_set = msgs.orderTally(p_set)
+	# 	for i in p_set:
+	# 		print "\t" + str(i[0]) + " --- " + str(i[1])
 			
 
 
+	# from pattern.en import parsetree
+	# # from pattern.search import search, Pattern
+	# from pattern.search import Pattern, search
+
+	# s = msgs.returnAllSentences(db)
+	# for e in s:
+	# 	# t = parsetree(str(e[0]))
+	# 	# print search('NP', t) # all noun phrases
+	# 	try:
+	# 		# t = parsetree(str(e[0]).decode('utf8'), lemmata=True)
+	# 		# p = Pattern.fromstring('{NP} be * than {NP}')
+	# 		# m = p.match(t)
+	# 		# print str(e[0])
+	# 		# print m.group(1)
+	# 		# print m.group(2)
+	# 		# print m.group(1).string
 
 
-		# print e[0]
-		# s = str(e[0])
-		# s = parsetree(s) 
-		# for sentence in s: 
-		# 	# print "sentence is ", sentence
-		# 	for chunk in sentence.chunks:
-		# 		# print "chunk is ", chunk
-		# 		for word in chunk.words:
-		# 			print word,
-		# print
+	# 		t = parsetree(str(e[0]).decode('utf8'), lemmata=True)
+	# 		# p = Pattern.fromstring('{PRP*} {JJ} {NN*} {be} {JJ}')
+	# 		p = Pattern.fromstring('{WRB} * {PRP*} * \?')
+	# 		m = p.match(t)
+	# 		print str(e[0])
+	# 		# print m
+	# 		print "\t"*10 + m.string[:-2] + m.string[-1]
+	# 		# print str(e[0])
+
+	# 		# print m.group(1)
+	# 		# print m.group(2)
+	# 		# print m.group(3)
+	# 		# print str(e[0])
+	# 		# print m.start
+	# 		# print m.group(3).start
+	# 		# print "I " + m.group(1).string + " " + m.group(2).string + " " + m.group(3).string
+
+	# 		# print "-"*50
+	# 		# print m.group(1).string
+
+	# 		# t = parsetree(str(e[0]).decode('utf8'))
+	# 		# se = search('JJ', t)
+	# 		# # print len(se)
+	# 		# # print len(se[0])
+	# 		# if len(se) > 0:
+	# 		# 	# print se
+	# 		# 	for el in se:
+	# 		# 		print el.string,
+	# 		# 	print "-"*50
+
+	# 		# print str(e[0])[m.group(1).start:m.group(2).start]
+			
+	# 	except:
+	# 		leon = 1
+
+
+	from pattern.en import parsetree
+	# from pattern.search import search, Pattern
+	from pattern.search import Pattern, search
+
+	s = msgs.returnAllSentences(db)
+	# for e in s:
+	# 	try:
+	# 		t = parsetree(str(e[0]).decode('utf8'), lemmata=True)
+	# 		p = Pattern.fromstring('{WRB} * {PRP*} * \?')
+	# 		m = p.match(t)
+	# 		print str(e[0])
+	# 		print "\t"*10 + m.string[:-2] + m.string[-1]			
+	# 	except:
+	# 		leon = 1
+
+	thinks = list()
+
+	for e in s:
+		try:
+			t = parsetree(str(e[0]).decode('utf8'), lemmata=True)
+			# p = Pattern.fromstring('NNP NN IN DT NP')
+			p = Pattern.fromstring('I think * about')
+			m = p.match(t)
+			print str(e[0])
+			print "\t"*10 + m.string
+			thinks.append(m.string)
+		except:
+			leon = 1
+
+	
+
+	things = list()
+	for e in s:
+		try:
+			t = parsetree(str(e[0]).decode('utf8'), lemmata=True)
+			# p = Pattern.fromstring('NNP NN IN DT NP')
+			p = Pattern.fromstring('{JJ} {NNS}')
+			m = p.match(t)
+			# print str(e[0])
+			# print "\t"*10 + m.string
+			things.append(m.string)
+
+		except:
+			leon = 1
+
+	for i in range(10):
+		print random.sample(thinks, 1)[0]
+		print random.sample(things, 1)[0]
+		print ""
+		print "-"*50
+
+
+	# for i in range(10):
+
+	# 	rrs = msgs.returnRandomSentence(db)
+	# 	# print rrs[0]
+	# 	blob = TextBlob(str(rrs[0]).decode('utf8'))
+	# 	# print blob.tags
+	# 	# np = " "
+	# 	print len(blob.noun_phrases)
+	# 	np = " "
+	# 	if len(blob.noun_phrases) > 0:
+	# 		np = blob.noun_phrases[0]
+
+	# 	# while len(np) < 10:
+	# 	# 	print "loop"
+	# 	# 	rrs = msgs.returnRandomSentence(db)
+	# 	# 	# print rrs[0]
+	# 	# 	blob = TextBlob(str(rrs[0]).decode('utf8'))
+	# 	# 	# print blob.tags
+	# 	# 	np = blob.noun_phrases[0]
+	# 	print np
+
+		# if t == "NP":
+		# 	print w
+
+
+ 
+# s = 'The mobile web is more important than mobile apps.'
+# s = parsetree(s, relations=True, lemmata=True)
+# for match in search('NP be RB?+ important than NP', s):
+#     print match.constituents()[-1], '=>', \
+#           match.constituents()[0]
 
 
 
