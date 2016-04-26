@@ -108,7 +108,31 @@ if __name__ == "__main__" and len(mdb.db()) > 0:
 			patterns[p] = 0
 		patterns[p] += 1
 	patterns = msgs.orderTally(patterns)
-	pprint(patterns)
+	# pprint(patterns)
+
+
+	for i in range(50):
+		print str(patterns[i][0]) + " : "
+		p_set = dict()
+		for e in s:
+			blob = TextBlob(str(e[0]).decode('utf8'))
+			p  = ""
+			for word, pos in blob.tags:
+				p = p + " " + str(pos)
+			if p == str(patterns[i][0]):
+				if e[0] not in p_set:
+					p_set[e[0]] = 0
+				p_set[e[0]] += 1
+
+				# print "\t" + str(e[0])
+		p_set = msgs.orderTally(p_set)
+		for i in p_set:
+			print "\t" + str(i[0]) + " --- " + str(i[1])
+			
+
+
+
+
 		# print e[0]
 		# s = str(e[0])
 		# s = parsetree(s) 
