@@ -11,7 +11,6 @@ def os_system(command):
             break
         yield line
 
-
 def init(convoInterval):
 	print "[+] parsing messages..."
 	handle_id = 0
@@ -92,6 +91,52 @@ def init(convoInterval):
 
 def db():
 	return messages
+
+
+
+messages_chronological = list()
+def db_chron():
+	return messages_chronological
+
+def init_chronological():
+	print "[+] parsing messages..."
+	m_count = 0
+	for line in os_system('sqlite3 ~/Library/Messages/chat.db "select handle_id, is_from_me, date, text from message"'):
+		line = line.strip()
+
+		elems = line.split("|")
+		# prints data like this: ['0', '1', '451686174', 'yes, thanks of the quick reply']
+	
+		if len(elems) > 4: # that means that there were "|" symbols in the text message
+			while len(elems) > 4:
+				elems[len(elems) - 2] =  elems[len(elems) - 2] + "|" + elems[len(elems) - 1]
+				elems.remove(elems[len(elems) - 1])
+
+
+		if len(elems) == 4: #that's what we expect
+			person = elems[0]
+			speaker = elems[1]
+			time = elems[2]
+			text = elems[3]
+			temp_list = list()
+			temp_list.append(text)
+			temp_list.append(speaker)
+			temp_list.append(person)
+			temp_list.append(time)
+			messages_chronological.append(temp_list)
+			m_count += 1
+
+
+		elif len(elems) == 1: #that means there was only text because the text message was printed in several lines
+			messages_chronological[len(messages_chronological) - 1][0] += " " + elems[0] 
+		else:
+			print "-"*20 + "\n" + "[!] something went wrong with this line" + "\n" + "its elements are in this array:"
+			print elems
+			print "-"*20
+	print "[+] prepared " + str(m_count) + " messages."
+	return messages_chronological
+
+
 
 
 #### ANOTHER SOLUTION WOULD BE SOMETHING LIK THIS USINF PYTHON SQLITE3 library. Is this better?
@@ -237,30 +282,31 @@ def trendingwords(num_days, num_words, blacklist_limit, sender_id = 2):
 			print elems
 			print "-"*20
 
-	print "\nSettings:\n\tmessages analysed:",
-	if sender_id is 0:
-		print "only received messages"
-	elif sender_id is 1:
-		print "only sent messages"
-	else:
-		print "both received and sent messages"
-	print "\tlength of each segment: " + str(num_days) + " days\n\tblacklist parameter: " + str(blacklist_limit) + "\n\n-----\n"
+	# print "\nSettings:\n\tmessages analysed:",
+	# if sender_id is 0:
+	# 	print "only received messages"
+	# elif sender_id is 1:
+	# 	print "only sent messages"
+	# else:
+	# 	print "both received and sent messages"
+	# print "\tlength of each segment: " + str(num_days) + " days\n\tblacklist parameter: " + str(blacklist_limit) + "\n\n-----\n"
 	
 	output = dict()
 	for segment in all_data:
 		ordered_tally = msgs.orderTally(all_data[segment])
-		print str(segment + 1) + ". Segment (" + str(date_by_section_count[segment]) + "):"
+		# print str(segment + 1) + ". Segment (" + str(date_by_section_count[segment]) + "):"
 		
 		if len(ordered_tally) <= num_words:
 			for word, tally in ordered_tally:
-				print "\t", word, tally
+				# print "\t", word, tally
+				output[word] = 0
 		else:
 			c = 0
 			for word, tally in ordered_tally:
 				if c >= num_words:
 					break
 				if word not in blacklist:
-					print "\t", word, tally
+					# print "\t", word, tally
 					output[word] = 0
 					c += 1
 	return output

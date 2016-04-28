@@ -6,17 +6,9 @@ import random
 import math
 
 
-# bigger analysises
-# mdb.trendingwords(15, 5, 4, 1)
-# mdb.trendingwords(2, 5, 150, 0)
-# mdb.trendingwords(2, 10, 150, 0)
-trending = mdb.trendingwords(2, 10, 150, 0)
-
-
-
-
-
-
+# analysises:
+trending = mdb.trendingwords(1, 10, 150, 1)
+# print trending
 
 
 #                             _ _     
@@ -25,39 +17,53 @@ trending = mdb.trendingwords(2, 10, 150, 0)
 # | |_) | | |  __/ |_) | | (_| | |_) |
 # | .__/|_|  \___| .__/   \__,_|_.__/ 
 # |_|            |_|                  
-convoInterval = 86400 #one day
-mdb.init(convoInterval)
+# convoInterval = 86400 #one day
+# mdb.init(convoInterval)
+mdb.init_chronological()
 
 
-
-if __name__ == "__main__" and len(mdb.db()) > 0:
-	
-# 	print "[+] actual program starts.\n"
-	db = mdb.db()
-
-
-	sent = msgs.returnAllSentences(db)
+if __name__ == "__main__" and len(mdb.db_chron()) > 0:
+	print "[+] program starts."
+	db = mdb.db_chron()
 
 	tally = dict()
 	
-	for s in sent:
-		# print s
+	for s in db:
 		text = s[0]
-		# print s[0]
-		# print text
-		if text in tally:
-			nothing = 1
-		else:
+		speaker = int(s[1])
+		if text not in tally and speaker == 1:
 			elems = text.split()
 			tally[text] = 0
 			for e in elems:
 				if e in trending:
 					tally[text] += 1
-	# pprint(msgs.orderTally(tally))
+
+	# print tally
 	t = msgs.orderTally(tally)
+	# print t
+
+	trendWordSentences = dict()
+	chosenWord = ""
+	got_it = False
 	for sentence in t:
-		if len(sentence[0]) < 40:
-			print sentence[0], sentence[1]
+		if len(sentence[0]) < 45 and len(sentence[0]) > 30:
+			# print sentence[0], sentence[1]
+			elems = sentence[0].split()
+			checked = set()
+			for e in elems:
+				if e in trending and e not in checked and got_it is not True:
+					checked.add(e)
+					if e not in trendWordSentences:
+						trendWordSentences[e] = list()
+					trendWordSentences[e].append(sentence[0])
+					if len(trendWordSentences[e]) > 5:
+						chosenWord = e
+						got_it = True
+
+	for s in trendWordSentences[chosenWord]:
+		print s
+
+
 
 
 	# ------------------------------------------------
@@ -176,6 +182,3 @@ if __name__ == "__main__" and len(mdb.db()) > 0:
 	# ------------------------------------------------
 	# ------------------------------------------------
 	# ------------------------------------------------
-
-
-
