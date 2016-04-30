@@ -357,17 +357,17 @@ def trendingwords(num_days, num_words, blacklist_limit, sender_id = 2, printing=
 		actualOutput["blacklist"] = blacklist
 		return actualOutput
 
-def optimizeTrendingWords(sender_id = 2):
+def optimizeTrendingWords(num_segments = 110, min_avg_bottom = 2, sender_id = 2):
 	num_days_per_segment = 0
 	num_words_to_print = 5
 	blacklist_parameter = 0
 	trending = trendingwords(num_days_per_segment, num_words_to_print, blacklist_parameter,sender_id, optimizing = 1)
 
-	while trending[0] > 110:
+	while trending[0] > num_segments:
 		num_days_per_segment += 1
 		trending = trendingwords(num_days_per_segment, num_words_to_print, blacklist_parameter, sender_id, printing=0, optimizing = 1)
 
-	while trending[2] > 2:
+	while trending[2] > min_avg_bottom:
 		if trending[2] > 100: blacklist_parameter += 10
 		elif trending[2] > 50: blacklist_parameter += 4
 		elif trending[2] > 20: blacklist_parameter += 2
