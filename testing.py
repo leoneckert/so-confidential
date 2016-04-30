@@ -33,14 +33,15 @@ mdb.init_chronological()
 
 if __name__ == "__main__" and len(mdb.db_chron()) > 0:
 # 	print "[+] program starts."
-	db = mdb.db_chron()
+	db_chron = mdb.db_chron()
 	# pprint(db)
+	sentences = msgs.returnChronSentences(db_chron)
 
 	tally = dict()
 	tally["SENT"] = dict()
 	tally["RECEIVED"] = dict()
 	
-	for s in db:
+	for s in sentences:
 		text = s[0]
 		length_text = len(text)
 		speaker = int(s[1])
@@ -48,7 +49,7 @@ if __name__ == "__main__" and len(mdb.db_chron()) > 0:
 			if text not in tally["SENT"]:
 				elems = text.split()
 				tally["SENT"][text] = 0.0
-				print text,
+				# print text,
 				for e in elems:
 					if e in SENT["trending"]:
 						tally["SENT"][text] += 100.0 - 100.0/len(elems)
@@ -62,7 +63,7 @@ if __name__ == "__main__" and len(mdb.db_chron()) > 0:
 			if text not in tally["RECEIVED"]:
 				elems = text.split()
 				tally["RECEIVED"][text] = 0.0
-				print text,
+				# print text,
 				for e in elems:
 					if e in RECEIVED["trending"]:
 						tally["RECEIVED"][text] += 100.0 - 100.0/len(elems)
@@ -76,22 +77,49 @@ if __name__ == "__main__" and len(mdb.db_chron()) > 0:
 	t = msgs.orderTally(tally["SENT"])
 
 	t2 = list()
+	t2q = list()
 	desired_length = 40
 	for s in t:
 		if len(s[0]) < desired_length:
-			t2.append(s)
+			if s[0].endswith("?"):
+				t2q.append(s)
+			else:
+				t2.append(s)
 
 
 	p = msgs.orderTally(tally["RECEIVED"])
 
 	p2 = list()
+	p2q = list()
 	for s in p:
 		if len(s[0]) < desired_length:
-			p2.append(s)
+			if s[0].endswith("?"):
+				p2q.append(s)
+			else:
+				p2.append(s)
 
-	for i in range(100):
-		print t2[i][0], t2[i][1] 
-		print "\t\t\t", p2[i][0], p2[i][1] 
+
+
+	for i in range(80):
+
+		print "[...]\n"
+		print random.sample(t2q, 1)[0][0]
+		print "\t\t\t\t", random.sample(p2, 1)[0][0]
+		print "\t\t\t\t", random.sample(p2q, 1)[0][0]
+		print random.sample(t2, 1)[0][0]
+		print "\t\t\t\t", random.sample(p2, 1)[0][0]
+		print random.sample(t2, 1)[0][0]
+		print random.sample(t2q, 1)[0][0]
+		print "\t\t\t\t", random.sample(p2, 1)[0][0]
+		print "\n[...]"
+
+		print "\n\n" + "-"*50 + "\n\n"
+
+	# for i in range(100):
+	# 	if t2[i][0].endswith("?"):
+	# 		print t2[i][0], t2[i][1] 
+	# 	if p2[i][0].endswith("?"):
+	# 		print "\t\t\t", p2[i][0], p2[i][1] 
 
 
 

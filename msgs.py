@@ -19,21 +19,24 @@ def returnDatetime(mac_timestamp):
 	return str(datetime.fromtimestamp(int(mac_timestamp) + 978307205))
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+def returnChronSentences(db_chron):
+	sentences = list()
+	db = db_chron
+	for text_data in db:
+		# print text
+		text = text_data[0]
+		speaker = text_data[1]
+		person = text_data[2]
+		time = text_data[3]
+		blob = TextBlob(text.decode('utf8'))
+		for sentence in blob.sentences:
+			tempList = list()
+			tempList.append(sentence)
+			tempList.append(speaker)
+			tempList.append(person)
+			tempList.append(time)
+			sentences.append(tempList)
+	return sentences
 
 
 
