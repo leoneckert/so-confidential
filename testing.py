@@ -6,9 +6,25 @@ import random
 import math
 
 
+# first deteremine the size of the dataset, 
+# then optimize the trending word algorithm
+
 # analysises:
-trending = mdb.trendingwords(1, 10, 150, 1)
+# trending = mdb.trendingwords(4, 5, 80, sender_id=1, printing=1, optimizing = 1)
+# print len(trending)
+
 # print trending
+
+
+print "[+] determining the trending words over time."
+print "[ ] this might take a momemt..."
+SENT = mdb.optimizeTrendingWords(sender_id = 1)
+print "[ ] thanks for the patience, your messages are full of wisdom..."
+RECEIVED = mdb.optimizeTrendingWords(sender_id = 0)
+# pprint(SENT)
+# pprint(RECEIVED)
+
+
 
 
 #                             _ _     
@@ -19,49 +35,51 @@ trending = mdb.trendingwords(1, 10, 150, 1)
 # |_|            |_|                  
 # convoInterval = 86400 #one day
 # mdb.init(convoInterval)
-mdb.init_chronological()
+# mdb.init_chronological()
 
 
-if __name__ == "__main__" and len(mdb.db_chron()) > 0:
-	print "[+] program starts."
-	db = mdb.db_chron()
+# if __name__ == "__main__" and len(mdb.db_chron()) > 0:
+# 	print "[+] program starts."
+# 	db = mdb.db_chron()
 
-	tally = dict()
+# 	tally = dict()
 	
-	for s in db:
-		text = s[0]
-		speaker = int(s[1])
-		if text not in tally and speaker == 1:
-			elems = text.split()
-			tally[text] = 0
-			for e in elems:
-				if e in trending:
-					tally[text] += 1
+# 	for s in db:
+# 		text = s[0]
+# 		speaker = int(s[1])
+# 		if text not in tally and speaker == 1:
+# 			elems = text.split()
+# 			tally[text] = 0
+# 			for e in elems:
+# 				if e in trending:
+# 					tally[text] += 1
 
-	# print tally
-	t = msgs.orderTally(tally)
-	# print t
+# 	# print tally
+# 	t = msgs.orderTally(tally)
+# 	for s in t:
+# 		if len(s[0]) < 40:
+# 			print s[0], s[1]
 
-	trendWordSentences = dict()
-	chosenWord = ""
-	got_it = False
-	for sentence in t:
-		if len(sentence[0]) < 45 and len(sentence[0]) > 30:
-			# print sentence[0], sentence[1]
-			elems = sentence[0].split()
-			checked = set()
-			for e in elems:
-				if e in trending and e not in checked and got_it is not True:
-					checked.add(e)
-					if e not in trendWordSentences:
-						trendWordSentences[e] = list()
-					trendWordSentences[e].append(sentence[0])
-					if len(trendWordSentences[e]) > 5:
-						chosenWord = e
-						got_it = True
+	# trendWordSentences = dict()
+	# chosenWord = ""
+	# got_it = False
+	# for sentence in t:
+	# 	if len(sentence[0]) < 45 and len(sentence[0]) > 30:
+	# 		# print sentence[0], sentence[1]
+	# 		elems = sentence[0].split()
+	# 		checked = set()
+	# 		for e in elems:
+	# 			if e in trending and e not in checked and got_it is not True:
+	# 				checked.add(e)
+	# 				if e not in trendWordSentences:
+	# 					trendWordSentences[e] = list()
+	# 				trendWordSentences[e].append(sentence[0])
+	# 				if len(trendWordSentences[e]) > 5:
+	# 					chosenWord = e
+	# 					got_it = True
 
-	for s in trendWordSentences[chosenWord]:
-		print s
+	# for s in trendWordSentences[chosenWord]:
+	# 	print s
 
 
 

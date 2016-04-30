@@ -21,3 +21,7 @@ print all ten sentences left right for RECEIVED and SENT
 chosen trend word is the title
 
 // find a way to include randomness (trending screw can be turned too) and a preference of recent sentences
+
+
+
+ Start with for loop to find the sweet spots for the trending word values. Also return blacklist. Use blacklist also when evaluating the sentences (trending word plus blacklist word minus)

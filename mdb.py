@@ -174,7 +174,7 @@ import msgs # named twice !
 from pprint import pprint
 
 
-def trendingwords(num_days, num_words, blacklist_limit, sender_id = 2):
+def trendingwords(num_days, num_words, blacklist_limit, sender_id = 2, printing=0, optimizing = 0):
 	# num_days > amount of days of one time segment
 	# num_words > amount of words printed out per time segment
 	# black_list_parameter >
@@ -197,6 +197,9 @@ def trendingwords(num_days, num_words, blacklist_limit, sender_id = 2):
 	loop_count = 0
 
 	date_by_section_count = dict()
+
+	earliest_date = 0
+	latest_date = 0
 	
 	if sender_id is 0 or sender_id is 1:
 		command = 'sqlite3 ~/Library/Messages/chat.db "select handle_id, is_from_me, date, text from message where is_from_me = ' + str(sender_id) + ';"'
@@ -227,6 +230,8 @@ def trendingwords(num_days, num_words, blacklist_limit, sender_id = 2):
 				all_data[sectionCount] = dict()
 
 				date_by_section_count[sectionCount] = msgs.returnDatetime(time)[:10]
+				earliest_date = time
+			latest_date = time
 			first = False
 
 			words = text.split()
@@ -281,35 +286,101 @@ def trendingwords(num_days, num_words, blacklist_limit, sender_id = 2):
 			print "-"*20 + "\n" + "[!] something went wrong with this line" + "\n" + "its elements are in this array:"
 			print elems
 			print "-"*20
-
-	# print "\nSettings:\n\tmessages analysed:",
-	# if sender_id is 0:
-	# 	print "only received messages"
-	# elif sender_id is 1:
-	# 	print "only sent messages"
-	# else:
-	# 	print "both received and sent messages"
-	# print "\tlength of each segment: " + str(num_days) + " days\n\tblacklist parameter: " + str(blacklist_limit) + "\n\n-----\n"
+	
+	if(printing):
+		print "\nSettings:\n\tmessages analysed:",
+		if sender_id is 0:
+			print "only received messages"
+		elif sender_id is 1:
+			print "only sent messages"
+		else:
+			print "both received and sent messages"
+		print "\tlength of each segment: " + str(num_days) + " days\n\tblacklist parameter: " + str(blacklist_limit) + "\n\n-----\n"
 	
 	output = dict()
+	sum_tops = 0
+	sum_bottoms = 0
 	for segment in all_data:
+		first = True
+
 		ordered_tally = msgs.orderTally(all_data[segment])
-		# print str(segment + 1) + ". Segment (" + str(date_by_section_count[segment]) + "):"
+		if(printing): print str(segment + 1) + ". Segment (" + str(date_by_section_count[segment]) + "):"
 		
 		if len(ordered_tally) <= num_words:
+			c = 0
 			for word, tally in ordered_tally:
-				# print "\t", word, tally
-				output[word] = 0
+				if word not in blacklist:
+					if(printing): print "\t", word, tally
+					output[word] = 0
+					
+					c += 1
+					
+					if first == True:
+						sum_tops = sum_tops + tally
+					first = False
+					if c is num_words:
+						sum_bottoms = sum_bottoms + tally
 		else:
 			c = 0
 			for word, tally in ordered_tally:
 				if c >= num_words:
 					break
 				if word not in blacklist:
-					# print "\t", word, tally
+					if(printing): print "\t", word, tally
 					output[word] = 0
 					c += 1
-	return output
+
+					if first == True:
+						sum_tops = sum_tops + tally
+					first = False
+					if c is num_words:
+						sum_bottoms = sum_bottoms + tally
+
+	
+	num_segments = len(all_data)
+	# print num_segments
+	avg_sum_tops = sum_tops/num_segments
+	# print avg_sum_tops
+	avg_sum_bottoms = sum_bottoms/num_segments
+	# print avg_sum_bottoms
+	optimize_list = list()
+	optimize_list.append(num_segments)
+	optimize_list.append(avg_sum_tops)
+	optimize_list.append(avg_sum_bottoms)
+	optimize_list.append(earliest_date)
+	optimize_list.append(latest_date)
+
+	if optimizing: return optimize_list
+	if not optimizing: 
+		actualOutput = dict()
+		actualOutput["trending"] = output
+		actualOutput["blacklist"] = blacklist
+		return actualOutput
+
+def optimizeTrendingWords(sender_id = 2):
+	num_days_per_segment = 0
+	num_words_to_print = 5
+	blacklist_parameter = 0
+	trending = trendingwords(num_days_per_segment, num_words_to_print, blacklist_parameter,sender_id, optimizing = 1)
+
+	while trending[0] > 110:
+		num_days_per_segment += 1
+		trending = trendingwords(num_days_per_segment, num_words_to_print, blacklist_parameter, sender_id, printing=0, optimizing = 1)
+
+	while trending[2] > 2:
+		if trending[2] > 100: blacklist_parameter += 10
+		elif trending[2] > 50: blacklist_parameter += 4
+		elif trending[2] > 20: blacklist_parameter += 2
+		else: blacklist_parameter += 1
+		trending = trendingwords(num_days_per_segment, num_words_to_print, blacklist_parameter, sender_id, printing=0, optimizing = 1)
+
+	trending = trendingwords(num_days_per_segment, num_words_to_print, blacklist_parameter, sender_id, printing=0, optimizing = 0)
+	
+	if(sender_id == 1): print "[+] found the trending words of all SENT messages."
+	elif(sender_id == 0): print "[+] found the trending words of all RECEIVED messages."
+	else: print "[+] found the trending words of all RECEIVED messages."
+	return trending
+	
 
 
 
