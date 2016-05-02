@@ -167,10 +167,10 @@ def optimiseTrendingwordsAndBlacklist(segmenthook = 80, num_words = 2, bottom_av
 		print "[+] retrieved trending and blacklisted words for all messages."
 
 	print "[ ] parameters were optimised as follows:"
-	print "\t", days_per_segement, "days per segment"
-	print "\t", blacklist_limit, "segments without a specific word before it gets off the blacklist."
-	print "\t", returned_data[3], "trending words returned"
-	print "\t", returned_data[4], "blacklisted words returned"
+	print "\t>", days_per_segement, "days per segment /", returned_data[0], "segments in total."
+	print "\t> a word is blacklisted if it appears in", returned_data[0] - blacklist_limit, "or more segments (control parameter:", blacklist_limit, ")." 
+	print "\t>", returned_data[3], "trending words returned"
+	print "\t>", returned_data[4], "blacklisted words returned"
 
 
 	return getTrendingwordsAndBlacklist(num_days = days_per_segement, num_words = num_words, blacklist_limit = blacklist_limit, sender_id = sender_id, printing=printing, optimizing = 0)

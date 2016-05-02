@@ -1,5 +1,8 @@
 import mdb
 import msgs
+from pprint import pprint
+
+msgs.printHeadline();
 
 mdb.init()
 
@@ -28,4 +31,12 @@ sentSentences = mdb.returnSentences(sender_id = 1)
 receivedSentences = mdb.returnSentences(sender_id = 0)
 
 # rate the sentences and bring in order
-
+sentRatedSentences = msgs.rateSentences(sentSentences, sentTrendingBlacklist, maxSentenceLength = 40, sender_id = 1)
+receivedRatedSentences = msgs.rateSentences(receivedSentences, receivedTrendingBlacklist, maxSentenceLength = 40, sender_id = 0)
+pprint(sentRatedSentences["aRated"])
+pprint(receivedRatedSentences["aRated"])
+for i in range(100):
+	print "SENT:", sentRatedSentences["aRated"][i][0]
+	print "RECEIVED:", receivedRatedSentences["aRated"][i][0]
+	print "-"*50
+# shuffle the the lists with a weight to time and rating
