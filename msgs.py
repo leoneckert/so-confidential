@@ -2,7 +2,8 @@ from datetime import datetime
 from pprint import pprint
 import random
 import math
-from textblob import TextBlob
+from textblob import TextBlob, Word
+import enchant
 
 def returnDatetime(mac_timestamp):
 	return str(datetime.fromtimestamp(int(mac_timestamp) + 978307200))
@@ -296,57 +297,162 @@ def generatePoem(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedLis
 	sent_needed = 10
 	received_needed = 10
 
+	notWantedNouns = ('i', 'u','you','ich','we','they', 'i\'m', 'i\u2019m', '\xe5')
+	notWantedVerbs = ('have', 'be', 'do', 'i', 'go', 'get')
+
+	d = enchant.Dict("en_US")
 	while sent_needed > 0 or received_needed > 0:
 		sent_needed = 10
 		received_needed = 10
 
 		random_noun = random.choice(available_nouns)
+		# while random_noun.lower() in notWantedNouns:
+		# 	random_noun = random.choice(available_nouns)
+		try:
+			while d.check(random_noun) is False or random_noun.lower() in notWantedNouns:
+				# print random_noun, "is not english"
+				random_noun = random.choice(available_nouns)
+		except:
+			nevermind = 1
+		
 		random_verb = random.choice(available_verbs)
+		try:
+			while d.check(random_verb) is False or Word(random_verb).lemmatize('v') in notWantedVerbs:
+				# print random_verb, "is not english"
+				random_verb = random.choice(available_verbs)
+		except:
+			nevermind = 1
+		
 		random_adjective = random.choice(available_adjectives)
-		print "-----"
+		try:
+			while d.check(random_adjective) is False:
+				# print random_adjective, "is not english"
+				random_adjective = random.choice(available_adjectives)
+		except:
+			nevermind = 1
+
+		
+
 		sent_needed -= len(nouns[random_noun]["sent"])
-		print sent_needed
+
 		sent_needed -= len(verbs[random_verb]["sent"])
-		print sent_needed
+
 		sent_needed -= len(adjectives[random_adjective]["sent"])
-		print sent_needed
-		print "--"
 
 		received_needed -= len(nouns[random_noun]["received"])
-		print received_needed
+
 		received_needed -= len(verbs[random_verb]["received"])
-		print received_needed
+
 		received_needed -= len(adjectives[random_adjective]["received"])
-		print received_needed
 
+	print "---\nTitle:"
 	print random_noun, random_verb,random_adjective
+	print "---\n"
 
-	pprint(nouns[random_noun])
-	pprint(verbs[random_verb])
-	pprint(adjectives[random_adjective])
+	
+	all_sentences = dict()
+	all_sentences[random_noun] = nouns[random_noun]
+	all_sentences[random_verb] = verbs[random_verb]
+	all_sentences[random_adjective] = adjectives[random_adjective]
 
-	# MISSING not wantd words like is etc
+	pprint(all_sentences)
+
+	
+	# currentWord = random.choice([random_noun, random_adjective, random_adjective])
+	currentWord = random.choice([random_noun])
+	
+	used = set()
+
+	print "currentword is >", currentWord
+
+	temp_list = [s for s in all_sentences[currentWord]["sent"]]
+	print temp_list
+
+	sentence1 = random.choice(temp_list)
+	used.add(sentence1)
+	print "\t\t\t\t",sentence1
+
+	def pickSameWord(string, currentWord):
+		print "right now:", string, "in pickSameWord()"
+		print "currentword is >", currentWord
+		temp_list = [s for s in all_sentences[currentWord][string] if s not in used]
+		# what if the array is empty!
+		if len(temp_list) < 1:
+			print "in pickSameWord() but directing to pickDifferentWord()"
+			sentence2 = pickDifferentWord(string, currentWord)
+		#
+		else:
+			sentence2 = random.choice(temp_list)
+		return [sentence2, currentWord]
+
+	def pickDifferentWord(string, currentWord):
+		print "right now:", string, "in pickDifferentWord()"
+		print "currentword is >", currentWord
+		old_word = currentWord
+		while currentWord == old_word:
+			currentWord = random.choice([random_noun, random_adjective, random_adjective])
+		print "NEW currentword is >", currentWord
+		temp_list = [s for s in all_sentences[currentWord][string] if s not in used]
+		# what if the array is empty! cal this function again
+		if len(temp_list) < 1:
+			print "in pickDifferentWord() but running it again"
+			sentence2 = pickDifferentWord(string, currentWord)
+		#
+		else:
+			sentence2 = random.choice(temp_list)
+		return [sentence2, currentWord]
+
+	def letThemSpeak(string, currentWord):
+		if random.random() < 0.8:
+			if random.random() < 0.7:
+				sentence2 = pickSameWord(string, currentWord)
+			
+			else:
+				sentence2 = pickDifferentWord(string, currentWord)
+				
+			used.add(sentence2[0])
+			if string == "received": print "\t\t\t\t\t\t\t",
+			else: print "\t\t\t\t",
+			print sentence2[0]
+			return sentence2[1]
+		else: 
+			if random.random() < 0.7:
+				sentence2 = pickSameWord(string, currentWord)
+			
+			else:
+				sentence2 = pickDifferentWord(string, currentWord)
+				
+			used.add(sentence2[0])
+			if string == "received": print "\t\t\t\t\t\t\t",
+			else: print "\t\t\t\t",
+			print sentence2[0]
+			if random.random() < 0.7:
+				sentence2 = pickSameWord(string, sentence2[1])
+			
+			else:
+				sentence2 = pickDifferentWord(string, sentence2[1])
+				
+			used.add(sentence2[0])
+			if string == "received": print "\t\t\t\t\t\t\t",
+			else: print "\t\t\t\t",
+			print sentence2[0]
+			return sentence2[1]
+
+	currentWord = letThemSpeak("received", currentWord)
+	currentWord = letThemSpeak("sent", currentWord)
+	currentWord = letThemSpeak("received", currentWord)
+	currentWord = letThemSpeak("sent", currentWord)
 
 
 
-	# for sentence_data in SENT_B:
 
-	# 	text = sentence_data[0]
 
-	# 	for word, tag in text.tags:
-	# 		if tag.startswith("NN") or tag.startswith("VB") or tag.startswith("JJ"):
-	# 			if word not in tally:
-	# 				tally[word] = dict()
-	# 			if text not in tally[word]:
-	# 				tally[word][text] = 0
-	# 			tally[word][text] += 1
 
-	# for w in tally:
-	# 	if len(tally[w]) > 4:
-	# 		print w
-	# 		pprint(tally[w])
 
-	# 		print "\n\n"
+
+
+
+
 
 
 
