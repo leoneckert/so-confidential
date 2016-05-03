@@ -218,6 +218,3 @@ def returnSentences(sender_id = 2):
 
 
 
-
-
-

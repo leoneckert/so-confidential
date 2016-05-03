@@ -1,5 +1,8 @@
 from datetime import datetime
 from pprint import pprint
+import random
+import math
+from textblob import TextBlob
 
 def returnDatetime(mac_timestamp):
 	return str(datetime.fromtimestamp(int(mac_timestamp) + 978307200))
@@ -119,6 +122,241 @@ def rateSentences(sentences, trendingBlacklist, maxSentenceLength = 10000, minSe
 	print "\t> B-rated sentences:", len(bRated), "sentences (that contain trending words, yet still have a rating of 0 or lower)."
 
 	return {"aRated":aRated, "bRated":bRated}
+
+
+def getEarliestLatestDate(sentenceDataList):
+	earliestDate = 0
+	latestDate = 0
+	first = True
+	for sentence_data in sentenceDataList:
+		date = sentence_data[3]
+		if first == True:
+			first = False
+			earliestDate = date
+		if date < earliestDate:
+			earliestDate = date
+		
+		if date > latestDate:
+			latestDate = date
+	return [earliestDate, latestDate]
+
+
+def shuffleWithDateAndRating(aRatedbRatedList):
+	# only the arated list is gonna be shuffled here
+	aRatedbRatedListCOPY = dict()
+	
+	data_list = list()
+	for elem in aRatedbRatedList["aRated"]:
+		data_list.append(elem)
+
+	shuffled = list()
+	
+	while len(data_list) > 0:
+		
+		realEarliestDate = getEarliestLatestDate(data_list)[0] * 1.0
+		realLatestDate = getEarliestLatestDate(data_list)[1] * 1.0
+		maxDate = realLatestDate - realEarliestDate
+		count = 0.0
+		to_delete = list()
+		
+		for sentence_data in data_list:
+			realDate = sentence_data[3]
+			date = realDate - realEarliestDate
+			# print date/maxDate
+			if date == 0: date = 1
+			if maxDate == 0: maxDate = date
+			# if random() < 0.833 - count/(len(data_list)*1.2) and random() < (math.pow(date/maxDate, 3)):
+			# if random() < 1:
+			if random.random() < (math.pow(date/maxDate, 2)):
+				shuffled.append(sentence_data)
+				to_delete.append(sentence_data)
+			count += 1
+
+
+		#delete here:
+		for used in to_delete:
+			data_list.remove(used)
+
+
+	return {"aRated":shuffled, "bRated":aRatedbRatedList["bRated"]}
+
+
+def generatePoem(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList):
+	SENT_A = SENTshuffled_aRatedbRatedList["aRated"]
+	SENT_B = SENTshuffled_aRatedbRatedList["bRated"]
+	RECEIVED_A = RECEIVEDshuffled_aRatedbRatedList["aRated"]
+	RECEIVED_B = RECEIVEDshuffled_aRatedbRatedList["bRated"]
+
+	# wordCollections = dict()
+	nouns = dict()
+	verbs = dict()
+	adjectives = dict()
+
+	for sentence_data in SENT_A:
+
+		text = sentence_data[0]
+
+		for word, tag in text.tags:
+			if tag.startswith("NN"): 
+				if word not in nouns:
+					nouns[word] = dict()
+					nouns[word]["sent"] = dict()
+					nouns[word]["received"] = dict() 
+				if text not in nouns[word]["sent"]:
+					nouns[word]["sent"][text] = 0
+				nouns[word]["sent"][text] += 1
+
+			if tag.startswith("VB"): 
+				if word not in verbs:
+					verbs[word] = dict()
+					verbs[word]["sent"] = dict()
+					verbs[word]["received"] = dict() 
+				if text not in verbs[word]["sent"]:
+					verbs[word]["sent"][text] = 0
+				verbs[word]["sent"][text] += 1
+
+			if tag.startswith("JJ"): 
+				if word not in adjectives:
+					adjectives[word] = dict()
+					adjectives[word]["sent"] = dict()
+					adjectives[word]["received"] = dict() 
+				if text not in adjectives[word]["sent"]:
+					adjectives[word]["sent"][text] = 0
+				adjectives[word]["sent"][text] += 1
+
+		# or tag.startswith("VB") or tag.startswith("JJ"):
+
+	for sentence_data in RECEIVED_A:
+
+		text = sentence_data[0]
+
+		for word, tag in text.tags:
+			if tag.startswith("NN"): 
+				if word not in nouns:
+					nouns[word] = dict()
+					nouns[word]["received"] = dict()
+					nouns[word]["sent"] = dict()
+				if text not in nouns[word]["received"]:
+					nouns[word]["received"][text] = 0
+				nouns[word]["received"][text] += 1
+
+			if tag.startswith("VB"): 
+				if word not in verbs:
+					verbs[word] = dict()
+					verbs[word]["received"] = dict()
+					verbs[word]["sent"] = dict()
+				if text not in verbs[word]["received"]:
+					verbs[word]["received"][text] = 0
+				verbs[word]["received"][text] += 1
+
+			if tag.startswith("JJ"): 
+				if word not in adjectives:
+					adjectives[word] = dict()
+					adjectives[word]["received"] = dict()
+					adjectives[word]["sent"] = dict()
+				if text not in adjectives[word]["received"]:
+					adjectives[word]["received"][text] = 0
+				adjectives[word]["received"][text] += 1
+
+
+
+
+	# pprint(nouns)
+	available_nouns = list()
+	available_verbs = list()
+	available_adjectives = list()
+
+
+	print "-"*400
+	for w in nouns:
+		if len(nouns[w]["sent"]) > 0 and len(nouns[w]["received"]) > 0 and len(nouns[w]["sent"]) + len(nouns[w]["received"]) > 3:
+			# print w
+			# pprint(nouns[w])
+			# print "-"*40 
+			available_nouns.append(w)
+
+	for w in verbs:
+		if len(verbs[w]["sent"]) > 0 and len(verbs[w]["received"]) > 0 and len(verbs[w]["sent"]) + len(verbs[w]["received"]) > 3:
+			# print w
+			# pprint(verbs[w])
+			# print "-"*40 
+			available_verbs.append(w)
+
+	for w in adjectives:
+		if len(adjectives[w]["sent"]) > 0 and len(adjectives[w]["received"]) > 0 and len(adjectives[w]["sent"]) + len(adjectives[w]["received"]) > 3:
+			# print w
+			# pprint(adjectives[w])
+			# print "-"*40 
+			available_adjectives.append(w)
+
+	# print available_nouns
+	# print available_verbs
+	# print available_adjectives
+
+	sent_needed = 10
+	received_needed = 10
+
+	while sent_needed > 0 or received_needed > 0:
+		sent_needed = 10
+		received_needed = 10
+
+		random_noun = random.choice(available_nouns)
+		random_verb = random.choice(available_verbs)
+		random_adjective = random.choice(available_adjectives)
+		print "-----"
+		sent_needed -= len(nouns[random_noun]["sent"])
+		print sent_needed
+		sent_needed -= len(verbs[random_verb]["sent"])
+		print sent_needed
+		sent_needed -= len(adjectives[random_adjective]["sent"])
+		print sent_needed
+		print "--"
+
+		received_needed -= len(nouns[random_noun]["received"])
+		print received_needed
+		received_needed -= len(verbs[random_verb]["received"])
+		print received_needed
+		received_needed -= len(adjectives[random_adjective]["received"])
+		print received_needed
+
+	print random_noun, random_verb,random_adjective
+
+	pprint(nouns[random_noun])
+	pprint(verbs[random_verb])
+	pprint(adjectives[random_adjective])
+
+	# MISSING not wantd words like is etc
+
+
+
+	# for sentence_data in SENT_B:
+
+	# 	text = sentence_data[0]
+
+	# 	for word, tag in text.tags:
+	# 		if tag.startswith("NN") or tag.startswith("VB") or tag.startswith("JJ"):
+	# 			if word not in tally:
+	# 				tally[word] = dict()
+	# 			if text not in tally[word]:
+	# 				tally[word][text] = 0
+	# 			tally[word][text] += 1
+
+	# for w in tally:
+	# 	if len(tally[w]) > 4:
+	# 		print w
+	# 		pprint(tally[w])
+
+	# 		print "\n\n"
+
+
+
+
+
+
+
+
+
+
 
 
 

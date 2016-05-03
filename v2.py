@@ -2,7 +2,7 @@ import mdb
 import msgs
 from pprint import pprint
 
-msgs.printHeadline();
+# msgs.printHeadline();
 
 mdb.init()
 
@@ -33,10 +33,33 @@ receivedSentences = mdb.returnSentences(sender_id = 0)
 # rate the sentences and bring in order
 sentRatedSentences = msgs.rateSentences(sentSentences, sentTrendingBlacklist, maxSentenceLength = 40, sender_id = 1)
 receivedRatedSentences = msgs.rateSentences(receivedSentences, receivedTrendingBlacklist, maxSentenceLength = 40, sender_id = 0)
-pprint(sentRatedSentences["aRated"])
-pprint(receivedRatedSentences["aRated"])
-for i in range(100):
-	print "SENT:", sentRatedSentences["aRated"][i][0]
-	print "RECEIVED:", receivedRatedSentences["aRated"][i][0]
-	print "-"*50
-# shuffle the the lists with a weight to time and rating
+# for i in range(100):
+# 	print "SENT:", sentRatedSentences["aRated"][i][0]
+# 	# print "RECEIVED:", receivedRatedSentences["aRated"][i][0]
+# 	print "-"*50
+
+
+
+firstRun = True
+while True:
+	if firstRun == True or raw_input('\nPress enter for another poem...') == '':
+		firstRun = False
+		print "\n"
+		sentShuffled = msgs.shuffleWithDateAndRating(sentRatedSentences)
+		receivedShuffled = msgs.shuffleWithDateAndRating(receivedRatedSentences)
+		# for sentence_data in sentShuffled["aRated"]:
+		# for i in range(10):
+		# 	print "\t\t\t\t\t", sentShuffled["aRated"][i][0]
+		# 	print "\t\t\t\t\t\t\t\t", receivedShuffled["aRated"][i][0]
+
+		# potentially a data sctructrue that makes sure sentences are not used to often...
+		msgs.generatePoem(sentShuffled, receivedShuffled) # if only that function already existed
+
+
+
+
+
+
+
+
+
