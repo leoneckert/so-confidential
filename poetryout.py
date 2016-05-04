@@ -306,9 +306,9 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 	keeping_track["sentences_used"].add(receivedSelected)
 
 	# ------------------
-
-	print title
-	pprint(selected)
+	print "-"*10, "\n"
+	print "~", title, "~\n"
+	# pprint(selected)
 	for i in range(3):
 		random_s = random.choice(selected["sent"]) 
 		print random_s
