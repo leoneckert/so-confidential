@@ -182,266 +182,266 @@ def shuffleWithDateAndRating(aRatedbRatedList):
 	return {"aRated":shuffled, "bRated":aRatedbRatedList["bRated"]}
 
 
-def generatePoem(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList):
-	SENT_A = SENTshuffled_aRatedbRatedList["aRated"]
-	SENT_B = SENTshuffled_aRatedbRatedList["bRated"]
-	RECEIVED_A = RECEIVEDshuffled_aRatedbRatedList["aRated"]
-	RECEIVED_B = RECEIVEDshuffled_aRatedbRatedList["bRated"]
+# def generatePoem(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList):
+# 	SENT_A = SENTshuffled_aRatedbRatedList["aRated"]
+# 	SENT_B = SENTshuffled_aRatedbRatedList["bRated"]
+# 	RECEIVED_A = RECEIVEDshuffled_aRatedbRatedList["aRated"]
+# 	RECEIVED_B = RECEIVEDshuffled_aRatedbRatedList["bRated"]
 
-	# wordCollections = dict()
-	nouns = dict()
-	verbs = dict()
-	adjectives = dict()
+# 	# wordCollections = dict()
+# 	nouns = dict()
+# 	verbs = dict()
+# 	adjectives = dict()
 
-	for sentence_data in SENT_A:
+# 	for sentence_data in SENT_A:
 
-		text = sentence_data[0]
+# 		text = sentence_data[0]
 
-		for word, tag in text.tags:
-			if tag.startswith("NN"): 
-				if word not in nouns:
-					nouns[word] = dict()
-					nouns[word]["sent"] = dict()
-					nouns[word]["received"] = dict() 
-				if text not in nouns[word]["sent"]:
-					nouns[word]["sent"][text] = 0
-				nouns[word]["sent"][text] += 1
+# 		for word, tag in text.tags:
+# 			if tag.startswith("NN"): 
+# 				if word not in nouns:
+# 					nouns[word] = dict()
+# 					nouns[word]["sent"] = dict()
+# 					nouns[word]["received"] = dict() 
+# 				if text not in nouns[word]["sent"]:
+# 					nouns[word]["sent"][text] = 0
+# 				nouns[word]["sent"][text] += 1
 
-			if tag.startswith("VB"): 
-				if word not in verbs:
-					verbs[word] = dict()
-					verbs[word]["sent"] = dict()
-					verbs[word]["received"] = dict() 
-				if text not in verbs[word]["sent"]:
-					verbs[word]["sent"][text] = 0
-				verbs[word]["sent"][text] += 1
+# 			if tag.startswith("VB"): 
+# 				if word not in verbs:
+# 					verbs[word] = dict()
+# 					verbs[word]["sent"] = dict()
+# 					verbs[word]["received"] = dict() 
+# 				if text not in verbs[word]["sent"]:
+# 					verbs[word]["sent"][text] = 0
+# 				verbs[word]["sent"][text] += 1
 
-			if tag.startswith("JJ"): 
-				if word not in adjectives:
-					adjectives[word] = dict()
-					adjectives[word]["sent"] = dict()
-					adjectives[word]["received"] = dict() 
-				if text not in adjectives[word]["sent"]:
-					adjectives[word]["sent"][text] = 0
-				adjectives[word]["sent"][text] += 1
+# 			if tag.startswith("JJ"): 
+# 				if word not in adjectives:
+# 					adjectives[word] = dict()
+# 					adjectives[word]["sent"] = dict()
+# 					adjectives[word]["received"] = dict() 
+# 				if text not in adjectives[word]["sent"]:
+# 					adjectives[word]["sent"][text] = 0
+# 				adjectives[word]["sent"][text] += 1
 
-		# or tag.startswith("VB") or tag.startswith("JJ"):
+# 		# or tag.startswith("VB") or tag.startswith("JJ"):
 
-	for sentence_data in RECEIVED_A:
+# 	for sentence_data in RECEIVED_A:
 
-		text = sentence_data[0]
+# 		text = sentence_data[0]
 
-		for word, tag in text.tags:
-			if tag.startswith("NN"): 
-				if word not in nouns:
-					nouns[word] = dict()
-					nouns[word]["received"] = dict()
-					nouns[word]["sent"] = dict()
-				if text not in nouns[word]["received"]:
-					nouns[word]["received"][text] = 0
-				nouns[word]["received"][text] += 1
+# 		for word, tag in text.tags:
+# 			if tag.startswith("NN"): 
+# 				if word not in nouns:
+# 					nouns[word] = dict()
+# 					nouns[word]["received"] = dict()
+# 					nouns[word]["sent"] = dict()
+# 				if text not in nouns[word]["received"]:
+# 					nouns[word]["received"][text] = 0
+# 				nouns[word]["received"][text] += 1
 
-			if tag.startswith("VB"): 
-				if word not in verbs:
-					verbs[word] = dict()
-					verbs[word]["received"] = dict()
-					verbs[word]["sent"] = dict()
-				if text not in verbs[word]["received"]:
-					verbs[word]["received"][text] = 0
-				verbs[word]["received"][text] += 1
+# 			if tag.startswith("VB"): 
+# 				if word not in verbs:
+# 					verbs[word] = dict()
+# 					verbs[word]["received"] = dict()
+# 					verbs[word]["sent"] = dict()
+# 				if text not in verbs[word]["received"]:
+# 					verbs[word]["received"][text] = 0
+# 				verbs[word]["received"][text] += 1
 
-			if tag.startswith("JJ"): 
-				if word not in adjectives:
-					adjectives[word] = dict()
-					adjectives[word]["received"] = dict()
-					adjectives[word]["sent"] = dict()
-				if text not in adjectives[word]["received"]:
-					adjectives[word]["received"][text] = 0
-				adjectives[word]["received"][text] += 1
-
-
+# 			if tag.startswith("JJ"): 
+# 				if word not in adjectives:
+# 					adjectives[word] = dict()
+# 					adjectives[word]["received"] = dict()
+# 					adjectives[word]["sent"] = dict()
+# 				if text not in adjectives[word]["received"]:
+# 					adjectives[word]["received"][text] = 0
+# 				adjectives[word]["received"][text] += 1
 
 
-	# pprint(nouns)
-	available_nouns = list()
-	available_verbs = list()
-	available_adjectives = list()
 
 
-	print "-"*400
-	for w in nouns:
-		if len(nouns[w]["sent"]) > 0 and len(nouns[w]["received"]) > 0 and len(nouns[w]["sent"]) + len(nouns[w]["received"]) > 3:
-			# print w
-			# pprint(nouns[w])
-			# print "-"*40 
-			available_nouns.append(w)
+# 	# pprint(nouns)
+# 	available_nouns = list()
+# 	available_verbs = list()
+# 	available_adjectives = list()
 
-	for w in verbs:
-		if len(verbs[w]["sent"]) > 0 and len(verbs[w]["received"]) > 0 and len(verbs[w]["sent"]) + len(verbs[w]["received"]) > 3:
-			# print w
-			# pprint(verbs[w])
-			# print "-"*40 
-			available_verbs.append(w)
 
-	for w in adjectives:
-		if len(adjectives[w]["sent"]) > 0 and len(adjectives[w]["received"]) > 0 and len(adjectives[w]["sent"]) + len(adjectives[w]["received"]) > 3:
-			# print w
-			# pprint(adjectives[w])
-			# print "-"*40 
-			available_adjectives.append(w)
+# 	print "-"*400
+# 	for w in nouns:
+# 		if len(nouns[w]["sent"]) > 0 and len(nouns[w]["received"]) > 0 and len(nouns[w]["sent"]) + len(nouns[w]["received"]) > 3:
+# 			# print w
+# 			# pprint(nouns[w])
+# 			# print "-"*40 
+# 			available_nouns.append(w)
 
-	# print available_nouns
-	# print available_verbs
-	# print available_adjectives
+# 	for w in verbs:
+# 		if len(verbs[w]["sent"]) > 0 and len(verbs[w]["received"]) > 0 and len(verbs[w]["sent"]) + len(verbs[w]["received"]) > 3:
+# 			# print w
+# 			# pprint(verbs[w])
+# 			# print "-"*40 
+# 			available_verbs.append(w)
 
-	sent_needed = 10
-	received_needed = 10
+# 	for w in adjectives:
+# 		if len(adjectives[w]["sent"]) > 0 and len(adjectives[w]["received"]) > 0 and len(adjectives[w]["sent"]) + len(adjectives[w]["received"]) > 3:
+# 			# print w
+# 			# pprint(adjectives[w])
+# 			# print "-"*40 
+# 			available_adjectives.append(w)
 
-	notWantedNouns = ('i', 'u','you','ich','we','they', 'i\'m', 'i\u2019m', '\xe5')
-	notWantedVerbs = ('have', 'be', 'do', 'i', 'go', 'get')
+# 	# print available_nouns
+# 	# print available_verbs
+# 	# print available_adjectives
 
-	d = enchant.Dict("en_US")
-	while sent_needed > 0 or received_needed > 0:
-		sent_needed = 10
-		received_needed = 10
+# 	sent_needed = 10
+# 	received_needed = 10
 
-		random_noun = random.choice(available_nouns)
-		# while random_noun.lower() in notWantedNouns:
-		# 	random_noun = random.choice(available_nouns)
-		try:
-			while d.check(random_noun) is False or random_noun.lower() in notWantedNouns:
-				# print random_noun, "is not english"
-				random_noun = random.choice(available_nouns)
-		except:
-			nevermind = 1
+# 	notWantedNouns = ('i', 'u','you','ich','we','they', 'i\'m', 'i\u2019m', '\xe5')
+# 	notWantedVerbs = ('have', 'be', 'do', 'i', 'go', 'get')
+
+# 	d = enchant.Dict("en_US")
+# 	while sent_needed > 0 or received_needed > 0:
+# 		sent_needed = 10
+# 		received_needed = 10
+
+# 		random_noun = random.choice(available_nouns)
+# 		# while random_noun.lower() in notWantedNouns:
+# 		# 	random_noun = random.choice(available_nouns)
+# 		try:
+# 			while d.check(random_noun) is False or random_noun.lower() in notWantedNouns:
+# 				# print random_noun, "is not english"
+# 				random_noun = random.choice(available_nouns)
+# 		except:
+# 			nevermind = 1
 		
-		random_verb = random.choice(available_verbs)
-		try:
-			while d.check(random_verb) is False or Word(random_verb).lemmatize('v') in notWantedVerbs:
-				# print random_verb, "is not english"
-				random_verb = random.choice(available_verbs)
-		except:
-			nevermind = 1
+# 		random_verb = random.choice(available_verbs)
+# 		try:
+# 			while d.check(random_verb) is False or Word(random_verb).lemmatize('v') in notWantedVerbs:
+# 				# print random_verb, "is not english"
+# 				random_verb = random.choice(available_verbs)
+# 		except:
+# 			nevermind = 1
 		
-		random_adjective = random.choice(available_adjectives)
-		try:
-			while d.check(random_adjective) is False:
-				# print random_adjective, "is not english"
-				random_adjective = random.choice(available_adjectives)
-		except:
-			nevermind = 1
+# 		random_adjective = random.choice(available_adjectives)
+# 		try:
+# 			while d.check(random_adjective) is False:
+# 				# print random_adjective, "is not english"
+# 				random_adjective = random.choice(available_adjectives)
+# 		except:
+# 			nevermind = 1
 
 		
 
-		sent_needed -= len(nouns[random_noun]["sent"])
+# 		sent_needed -= len(nouns[random_noun]["sent"])
 
-		sent_needed -= len(verbs[random_verb]["sent"])
+# 		sent_needed -= len(verbs[random_verb]["sent"])
 
-		sent_needed -= len(adjectives[random_adjective]["sent"])
+# 		sent_needed -= len(adjectives[random_adjective]["sent"])
 
-		received_needed -= len(nouns[random_noun]["received"])
+# 		received_needed -= len(nouns[random_noun]["received"])
 
-		received_needed -= len(verbs[random_verb]["received"])
+# 		received_needed -= len(verbs[random_verb]["received"])
 
-		received_needed -= len(adjectives[random_adjective]["received"])
+# 		received_needed -= len(adjectives[random_adjective]["received"])
 
-	print "---\nTitle:"
-	print random_noun, random_verb,random_adjective
-	print "---\n"
+# 	print "---\nTitle:"
+# 	print random_noun, random_verb,random_adjective
+# 	print "---\n"
 
 	
-	all_sentences = dict()
-	all_sentences[random_noun] = nouns[random_noun]
-	all_sentences[random_verb] = verbs[random_verb]
-	all_sentences[random_adjective] = adjectives[random_adjective]
+# 	all_sentences = dict()
+# 	all_sentences[random_noun] = nouns[random_noun]
+# 	all_sentences[random_verb] = verbs[random_verb]
+# 	all_sentences[random_adjective] = adjectives[random_adjective]
 
-	pprint(all_sentences)
+# 	pprint(all_sentences)
 
 	
-	# currentWord = random.choice([random_noun, random_adjective, random_adjective])
-	currentWord = random.choice([random_noun])
+# 	# currentWord = random.choice([random_noun, random_adjective, random_adjective])
+# 	currentWord = random.choice([random_noun])
 	
-	used = set()
+# 	used = set()
 
-	print "currentword is >", currentWord
+# 	print "currentword is >", currentWord
 
-	temp_list = [s for s in all_sentences[currentWord]["sent"]]
-	print temp_list
+# 	temp_list = [s for s in all_sentences[currentWord]["sent"]]
+# 	print temp_list
 
-	sentence1 = random.choice(temp_list)
-	used.add(sentence1)
-	print "\t\t\t\t",sentence1
+# 	sentence1 = random.choice(temp_list)
+# 	used.add(sentence1)
+# 	print "\t\t\t\t",sentence1
 
-	def pickSameWord(string, currentWord):
-		print "right now:", string, "in pickSameWord()"
-		print "currentword is >", currentWord
-		temp_list = [s for s in all_sentences[currentWord][string] if s not in used]
-		# what if the array is empty!
-		if len(temp_list) < 1:
-			print "in pickSameWord() but directing to pickDifferentWord()"
-			sentence2 = pickDifferentWord(string, currentWord)
-		#
-		else:
-			sentence2 = random.choice(temp_list)
-		return [sentence2, currentWord]
+# 	def pickSameWord(string, currentWord):
+# 		print "right now:", string, "in pickSameWord()"
+# 		print "currentword is >", currentWord
+# 		temp_list = [s for s in all_sentences[currentWord][string] if s not in used]
+# 		# what if the array is empty!
+# 		if len(temp_list) < 1:
+# 			print "in pickSameWord() but directing to pickDifferentWord()"
+# 			sentence2 = pickDifferentWord(string, currentWord)
+# 		#
+# 		else:
+# 			sentence2 = random.choice(temp_list)
+# 		return [sentence2, currentWord]
 
-	def pickDifferentWord(string, currentWord):
-		print "right now:", string, "in pickDifferentWord()"
-		print "currentword is >", currentWord
-		old_word = currentWord
-		while currentWord == old_word:
-			currentWord = random.choice([random_noun, random_adjective, random_adjective])
-		print "NEW currentword is >", currentWord
-		temp_list = [s for s in all_sentences[currentWord][string] if s not in used]
-		# what if the array is empty! cal this function again
-		if len(temp_list) < 1:
-			print "in pickDifferentWord() but running it again"
-			sentence2 = pickDifferentWord(string, currentWord)
-		#
-		else:
-			sentence2 = random.choice(temp_list)
-		return [sentence2, currentWord]
+# 	def pickDifferentWord(string, currentWord):
+# 		print "right now:", string, "in pickDifferentWord()"
+# 		print "currentword is >", currentWord
+# 		old_word = currentWord
+# 		while currentWord == old_word:
+# 			currentWord = random.choice([random_noun, random_adjective, random_adjective])
+# 		print "NEW currentword is >", currentWord
+# 		temp_list = [s for s in all_sentences[currentWord][string] if s not in used]
+# 		# what if the array is empty! cal this function again
+# 		if len(temp_list) < 1:
+# 			print "in pickDifferentWord() but running it again"
+# 			sentence2 = pickDifferentWord(string, currentWord)
+# 		#
+# 		else:
+# 			sentence2 = random.choice(temp_list)
+# 		return [sentence2, currentWord]
 
-	def letThemSpeak(string, currentWord):
-		if random.random() < 0.8:
-			if random.random() < 0.7:
-				sentence2 = pickSameWord(string, currentWord)
+# 	def letThemSpeak(string, currentWord):
+# 		if random.random() < 0.8:
+# 			if random.random() < 0.7:
+# 				sentence2 = pickSameWord(string, currentWord)
 			
-			else:
-				sentence2 = pickDifferentWord(string, currentWord)
+# 			else:
+# 				sentence2 = pickDifferentWord(string, currentWord)
 				
-			used.add(sentence2[0])
-			if string == "received": print "\t\t\t\t\t\t\t",
-			else: print "\t\t\t\t",
-			print sentence2[0]
-			return sentence2[1]
-		else: 
-			if random.random() < 0.7:
-				sentence2 = pickSameWord(string, currentWord)
+# 			used.add(sentence2[0])
+# 			if string == "received": print "\t\t\t\t\t\t\t",
+# 			else: print "\t\t\t\t",
+# 			print sentence2[0]
+# 			return sentence2[1]
+# 		else: 
+# 			if random.random() < 0.7:
+# 				sentence2 = pickSameWord(string, currentWord)
 			
-			else:
-				sentence2 = pickDifferentWord(string, currentWord)
+# 			else:
+# 				sentence2 = pickDifferentWord(string, currentWord)
 				
-			used.add(sentence2[0])
-			if string == "received": print "\t\t\t\t\t\t\t",
-			else: print "\t\t\t\t",
-			print sentence2[0]
-			if random.random() < 0.7:
-				sentence2 = pickSameWord(string, sentence2[1])
+# 			used.add(sentence2[0])
+# 			if string == "received": print "\t\t\t\t\t\t\t",
+# 			else: print "\t\t\t\t",
+# 			print sentence2[0]
+# 			if random.random() < 0.7:
+# 				sentence2 = pickSameWord(string, sentence2[1])
 			
-			else:
-				sentence2 = pickDifferentWord(string, sentence2[1])
+# 			else:
+# 				sentence2 = pickDifferentWord(string, sentence2[1])
 				
-			used.add(sentence2[0])
-			if string == "received": print "\t\t\t\t\t\t\t",
-			else: print "\t\t\t\t",
-			print sentence2[0]
-			return sentence2[1]
+# 			used.add(sentence2[0])
+# 			if string == "received": print "\t\t\t\t\t\t\t",
+# 			else: print "\t\t\t\t",
+# 			print sentence2[0]
+# 			return sentence2[1]
 
-	currentWord = letThemSpeak("received", currentWord)
-	currentWord = letThemSpeak("sent", currentWord)
-	currentWord = letThemSpeak("received", currentWord)
-	currentWord = letThemSpeak("sent", currentWord)
+# 	currentWord = letThemSpeak("received", currentWord)
+# 	currentWord = letThemSpeak("sent", currentWord)
+# 	currentWord = letThemSpeak("received", currentWord)
+# 	currentWord = letThemSpeak("sent", currentWord)
 
 
 

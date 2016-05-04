@@ -1,6 +1,7 @@
 import mdb
 import msgs
 from pprint import pprint
+import poetryout
 
 # msgs.printHeadline();
 
@@ -39,6 +40,9 @@ receivedRatedSentences = msgs.rateSentences(receivedSentences, receivedTrendingB
 # 	print "-"*50
 
 
+keeping_track = dict()
+keeping_track["words_used"] = set()
+keeping_track["sentences_used"] = set()
 
 firstRun = True
 while True:
@@ -47,14 +51,9 @@ while True:
 		print "\n"
 		sentShuffled = msgs.shuffleWithDateAndRating(sentRatedSentences)
 		receivedShuffled = msgs.shuffleWithDateAndRating(receivedRatedSentences)
-		# for sentence_data in sentShuffled["aRated"]:
-		# for i in range(10):
-		# 	print "\t\t\t\t\t", sentShuffled["aRated"][i][0]
-		# 	print "\t\t\t\t\t\t\t\t", receivedShuffled["aRated"][i][0]
-
-		# potentially a data sctructrue that makes sure sentences are not used to often...
-		msgs.generatePoem(sentShuffled, receivedShuffled) # if only that function already existed
-
+		
+		keeping_track = poetryout.generate(sentShuffled, receivedShuffled, sentTrendingBlacklist, receivedTrendingBlacklist, keeping_track)
+		# pprint(keeping_track)
 
 
 

@@ -3,6 +3,7 @@ from os import path
 from textblob import TextBlob
 import msgs
 from pprint import pprint
+import enchant
 
 db = list()
 
@@ -60,6 +61,7 @@ def getTrendingwordsAndBlacklist(num_days = 2, num_words = 2, blacklist_limit = 
 
 	blacklist_checked_current_segment = set()
 
+	d = enchant.Dict("en_US")
 	for text_data in fdb:
 
 		text = text_data[0]
@@ -77,6 +79,12 @@ def getTrendingwordsAndBlacklist(num_days = 2, num_words = 2, blacklist_limit = 
 
 		words = text.split()
 		for word in words:
+			
+			# d = enchant.Dict("en_US")
+			if d.check(word) is False:
+				break
+
+
 			if word not in segments[current_segment_index]:
 				segments[current_segment_index][word] = 0
 			segments[current_segment_index][word] += 1
