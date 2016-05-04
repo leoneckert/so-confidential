@@ -5,14 +5,14 @@ import random
 
 
 
-def wordUsable(word, trending, keeping_track, old_word):
+def wordUsable(word, trending, keeping_track, old_words):
 	if word not in trending:
 		return False
 
 	# if word in keeping_track["words_used"]:
 	# 	return False
 
-	if word == old_word:
+	if word in old_words:
 		return False
 
 	notWantedVerbs = ('have', 'be', 'do', 'i', 'go', 'get', "don't", "it's")
@@ -31,7 +31,7 @@ def wordUsable(word, trending, keeping_track, old_word):
 
 
 # notWantedChars = set('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~')
-def updateWordCount(wordList, speaker, word_count, trending, keeping_track, old_word):
+def updateWordCount(wordList, speaker, word_count, trending, keeping_track, old_words):
 	notWantedChars = set('!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~')
 	d = enchant.Dict("en_US")
 	
@@ -48,7 +48,7 @@ def updateWordCount(wordList, speaker, word_count, trending, keeping_track, old_
 		# if word not in trending or word in keeping_track["words_used"]:
 		# 	return word_count
 
-		if not wordUsable(word, trending, keeping_track, old_word):
+		if not wordUsable(word, trending, keeping_track, old_words):
 			return word_count
 
 		# word = word.lower()
@@ -91,7 +91,7 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 	word_count = dict()
 	word_found = False
 	chosen_word = ""
-	old_word = ""
+	old_words = set()
 	checked_sentences = dict()
 	checked_sentences["sent"] = set()
 	checked_sentences["received"] = set()
@@ -105,9 +105,9 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 		ss_words = ss.split()
 		sr_words = sr.split()
 
-		word_count = updateWordCount(ss_words, "sent", word_count, trending, keeping_track, old_word)
+		word_count = updateWordCount(ss_words, "sent", word_count, trending, keeping_track, old_words)
 
-		word_count = updateWordCount(sr_words, "received", word_count, trending, keeping_track, old_word)
+		word_count = updateWordCount(sr_words, "received", word_count, trending, keeping_track, old_words)
 
 		# print ss
 		# print sr
@@ -163,7 +163,7 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 
 	word_count = dict()
 	word_found = False
-	old_word = chosen_word
+	old_words.add(chosen_word)
 	chosen_word = ""
 	checked_sentences = dict()
 	checked_sentences["sent"] = set()
@@ -178,9 +178,9 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 		ss_words = ss.split()
 		sr_words = sr.split()
 
-		word_count = updateWordCount(ss_words, "sent", word_count, trending, keeping_track, old_word)
+		word_count = updateWordCount(ss_words, "sent", word_count, trending, keeping_track, old_words)
 
-		word_count = updateWordCount(sr_words, "received", word_count, trending, keeping_track, old_word)
+		word_count = updateWordCount(sr_words, "received", word_count, trending, keeping_track, old_words)
 
 		# print ss
 		# print sr
@@ -236,7 +236,7 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 
 	word_count = dict()
 	word_found = False
-	old_word = chosen_word
+	old_words.add(chosen_word)
 	chosen_word = ""
 	checked_sentences = dict()
 	checked_sentences["sent"] = set()
@@ -251,9 +251,9 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 		ss_words = ss.split()
 		sr_words = sr.split()
 
-		word_count = updateWordCount(ss_words, "sent", word_count, trending, keeping_track, old_word)
+		word_count = updateWordCount(ss_words, "sent", word_count, trending, keeping_track, old_words)
 
-		word_count = updateWordCount(sr_words, "received", word_count, trending, keeping_track, old_word)
+		word_count = updateWordCount(sr_words, "received", word_count, trending, keeping_track, old_words)
 
 		# print ss
 		# print sr
@@ -315,7 +315,7 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 		selected["sent"].remove(random_s);
 
 		random_s = random.choice(selected["received"]) 
-		print random_s.rjust(70)
+		print "\t\t\t\t", random_s
 		selected["received"].remove(random_s);
 	print "\n", "-"*10, "\n"
 
