@@ -315,9 +315,9 @@ def generate(SENTshuffled_aRatedbRatedList, RECEIVEDshuffled_aRatedbRatedList, s
 		selected["sent"].remove(random_s);
 
 		random_s = random.choice(selected["received"]) 
-		print "\t\t\t\t\t", random_s
+		print random_s.rjust(70)
 		selected["received"].remove(random_s);
-
+	print "\n", "-"*10, "\n"
 
 
 
