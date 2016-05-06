@@ -47,13 +47,17 @@ keeping_track["sentences_used"] = set()
 firstRun = True
 while True:
 	if firstRun == True or raw_input('\nPress enter for another poem...') == '':
-		firstRun = False
-		print "\n"
-		sentShuffled = msgs.shuffleWithDateAndRating(sentRatedSentences)
-		receivedShuffled = msgs.shuffleWithDateAndRating(receivedRatedSentences)
-		
-		keeping_track = poetryout.generate(sentShuffled, receivedShuffled, sentTrendingBlacklist, receivedTrendingBlacklist, keeping_track)
-		# pprint(keeping_track)
+		for i in range(200):
+			try:
+				firstRun = False
+				print "\n", i
+				sentShuffled = msgs.shuffleWithDateAndRating(sentRatedSentences)
+				receivedShuffled = msgs.shuffleWithDateAndRating(receivedRatedSentences)
+				
+				keeping_track = poetryout.generate(sentShuffled, receivedShuffled, sentTrendingBlacklist, receivedTrendingBlacklist, keeping_track)
+				# pprint(keeping_track)
+			except:
+				nevermind = 1
 
 
 
